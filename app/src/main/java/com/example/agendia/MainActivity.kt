@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.example.agendia.navigation.NavigationHost
 import com.example.agendia.navigation.NavigationRoute
 import com.example.agendia.ui.theme.AgendiaTheme
@@ -22,10 +21,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AgendiaTheme {
-                val navController = rememberNavController()
                 val startDestination = NavigationRoute.LoginScreen
 
-                NavigationHost(navController, startDestination)
+                NavigationHost(startDestination)
             }
         }
     }

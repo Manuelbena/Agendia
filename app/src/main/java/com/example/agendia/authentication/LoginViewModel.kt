@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModel
 
 @HiltViewModel
 class LoginViewModel @Inject constructor() : ViewModel() {
-
     var state by mutableStateOf(LoginState())
         private set
 
     fun onEvent(event: LoginEvent) {
         when (event) {
+            is LoginEvent.LogIn -> {
+                println()
+            }
         }
     }
+
 }
