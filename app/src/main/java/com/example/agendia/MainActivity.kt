@@ -4,10 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.agendia.navigation.NavigationHost
 import com.example.agendia.navigation.NavigationRoute
 import com.example.agendia.ui.theme.AgendiaTheme
@@ -21,7 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AgendiaTheme {
-                val startDestination = NavigationRoute.LoginScreen
+                val startDestination = NavigationRoute.HomeScreen
 
                 NavigationHost(startDestination)
             }
@@ -29,18 +25,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AgendiaTheme {
-        Greeting("Android")
-    }
-}
