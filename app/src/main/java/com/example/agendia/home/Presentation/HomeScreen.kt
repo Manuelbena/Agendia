@@ -1,15 +1,17 @@
 package com.example.agendia.home.Presentation
 
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,16 +22,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.AddCircle
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
@@ -38,6 +35,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +46,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,99 +57,149 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+
 import com.example.agendia.R
+import com.example.agendia.home.Presentation.model.BottomNavigationItem
 import com.example.agendia.home.Presentation.model.Task
 import com.example.agendia.ui.theme.ColorBlue
 import com.example.agendia.ui.theme.TextColor
 import com.example.agendia.ui.theme.esmerald
 import com.example.agendia.ui.theme.ivory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import kotlin.text.format
+
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+// List of navigation items
+    val items = listOf(
+        BottomNavigationItem("Inicio", Icons.Filled.Home),
+        BottomNavigationItem("Calendario", Icons.Filled.DateRange),
+        BottomNavigationItem("Credito", Icons.Filled.ShoppingCart),
+        BottomNavigationItem("Ajustes", Icons.Filled.Settings)
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = ColorBlue)
-    ) {
+    )
+    // Get today's date
+    val today = LocalDate.now()
 
-        // Row de saludo y fecha
-        Row(
+    // Format the date as "dd 'de' MMMM 'de' yyyy" (e.g., "08 de enero de 2023")
+    val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy",)
+    val formattedDate = today.format(formatter)
+
+    // State to track the currently selected item
+    var selectedItemIndex by remember { mutableIntStateOf(0) }
+
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = ColorBlue,
+                contentColor = ivory,
+                tonalElevation = 10.dp
+            ) {
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        icon = {
+                            Icon(item.icon, contentDescription = item.title)
+                        },
+                        label = { Text(item.title) },
+                        selected = selectedItemIndex == index,
+                        onClick = {
+                            selectedItemIndex = index
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = esmerald
+                        )
+                    )
+                }
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButtonExample(modifier = Modifier)
+        },
+    ) { innerPadding ->
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
+                .fillMaxSize()
+                .background(color = ColorBlue)
+                .padding(innerPadding) // Add padding to the Box
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxSize()
             ) {
-                Text(
+                // Row de saludo y fecha
+                Row(
                     modifier = Modifier
-                        .padding(horizontal = 12.dp),
-                    text = "Hola, Manuel",
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Start,
-                    color = ivory,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = "08 de enero de 2023",
+                        .fillMaxWidth()
+                        .padding(top = 50.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp),
+                            text = "Hola, Manuel",
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Start,
+                            color = ivory,
+                            fontSize = 16.sp
+                        )
+
+                        Text(
+                            text = formattedDate,
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp),
+                            color = ivory,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Start,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.mipmap.ic_lluvia),
+                            contentDescription = "Imagen de perfil",
+                            modifier = Modifier
+                                .size(60.dp)
+                        )
+                        Text(
+                            text = "17ªC",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 12.sp,
+                            color = ivory
+                        )
+                    }
+
+                }
+
+                // Card rellena
+                FilledCard(
                     modifier = Modifier
-                        .padding(horizontal = 12.dp),
-                    color = ivory,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Start,
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.mipmap.ic_lluvia),
-                    contentDescription = "Imagen de perfil",
-                    modifier = Modifier
-                        .size(60.dp)
-                )
-                Text(
-                    text = "17ªC",
-                    color = ivory,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Start,
+                        .fillMaxWidth()
+                        .weight(1f) // Ocupa todo el espacio restante
+                        .clip(RoundedCornerShape(topStart = 25.dp)) // Redondea solo la esquina superior izquierda
                 )
             }
         }
-        // Fin del saludo y fecha
-
-        // Inicio de Card
-        FilledCard(
-            modifier = Modifier
-                .fillMaxWidth()
-
-                .padding(top = 150.dp)
-                .clip(RoundedCornerShape(topStart = 30.dp)),
-        )
-        // Fin de Card
-
-
-        BottomNavigationBarExample(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-
-        )
-
     }
-
-
-
 }
 
 
@@ -156,12 +208,12 @@ fun FilledCard(
     modifier: Modifier
 ) {
     val tasks = listOf(
-        Task("09:00", "Reunión con el equipo de diseño", "Oficina principal"),
-        Task("10:00", "Presentación del proyecto", "Sala de conferencias"),
-        Task("11:00", "Revisión de código de ayer", "Oficina"),
-        Task("12:00", "Reunión con el equipo de diseño", "Oficina principal"),
-        Task("12:45", "Presentación del proyecto", "Sala de conferencias"),
-        Task("12:55", "Revisión de código", "Oficina"),
+        Task("09:00", "Reunión con el equipo de diseño", "Oficina principal", true),
+        Task("10:00", "Presentación del proyecto", "Sala de conferencias", false),
+        Task("11:00", "Revisión de código de ayer", "Oficina", false),
+        Task("12:00", "Reunión con el equipo de diseño", "Oficina principal", false),
+        Task("12:45", "Presentación del proyecto", "Sala de conferencias", false),
+        Task("12:55", "Revisión de código", "Oficina", false),
     )
 
 
@@ -182,6 +234,11 @@ fun FilledCard(
                     .fillMaxWidth()
                     .padding(20.dp),
                 textAlign = TextAlign.Start,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                fontSize = 14.sp,
+                color = TextColor
             )
 
             ItemToday(tasks) //eventos de hoy
@@ -191,29 +248,16 @@ fun FilledCard(
                 textDecoration = TextDecoration.Underline,
                 lineHeight = 25.sp,
                 overflow = TextOverflow.Ellipsis,
-                color = ColorBlue,
+                color = TextColor,
                 maxLines = 1,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp
             )
 
         }
-
-
-
         ItemEvent(task = tasks) // Fin de todos los eventos de hoy
-
-
-        FloatingActionButtonExample(
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(bottom = 25.dp)
-                .padding(16.dp)
-        )
-
     }
 
 
@@ -234,59 +278,82 @@ fun FloatingActionButtonExample(modifier: Modifier) {
 @Composable
 fun ItemToday(task: List<Task>) {
 
-    task.take(3).forEach { eventToday ->
-        Column {
-            ElevatedCard(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 4.dp
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, bottom = 6.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = ivory,
-                ),
+    Column(
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
 
-                ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+        task.take(3).forEach { activity ->
+            ActivityRow(activity)
+        }
+    }
+}
 
-                    Column(
-                        modifier = Modifier
-                            .padding(12.dp)
-                    ) {
-                        Text(
-                            text = "09:00",
-                            fontSize = 12.sp
-                        )
-                    }
+@Composable
+fun ActivityRow(activity: Task) {
+    Row(
+        modifier = Modifier.padding(horizontal = 10.dp),
+        verticalAlignment = Alignment.Top,
 
-                    Column(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
-                    )
-                    {
-                        Text(
-                            text = "Resumen: Reunión con el equipo de diseño",
-                            fontSize = 12.sp
-                        )
-                        Text(
-                            text = "Lugar: Oficina principal",
-                            fontSize = 12.sp
-                        )
-                    }
+        ) {
 
+        Text(
+            text = activity.date,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            if (activity.isActive) {
+                Canvas(modifier = Modifier.size(24.dp)) {
+                    drawCircle(color = TextColor, radius = size.minDimension / 3)
+                }
+            } else {
+                Canvas(modifier = Modifier.size(24.dp)) {
+                    drawCircle(color = esmerald, radius = size.minDimension / 3)
                 }
             }
 
-
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(60.dp)
+                    .background(TextColor)
+            )
         }
-    }
 
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Text(
+                text = activity.summary,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                color = TextColor,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 12.sp
+            )
+            Text(
+                text = activity.location,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 12.sp
+            )
+        }
+
+
+    }
 }
+
 
 @Composable
 fun ItemEvent(task: List<Task>) {
@@ -296,8 +363,13 @@ fun ItemEvent(task: List<Task>) {
             text = "Proximas Tareas",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp),
+                .padding(20.dp),
             textAlign = TextAlign.Start,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
+            fontSize = 14.sp,
+            color = TextColor
         )
 
         LazyRow(
@@ -324,8 +396,11 @@ fun ItemEvent(task: List<Task>) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "${task.summary}",
+                            text = task.summary,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyLarge,
                             maxLines = 2,
+                            color = TextColor,
                             textAlign = TextAlign.Center,
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 12.sp
@@ -343,43 +418,13 @@ fun ItemEvent(task: List<Task>) {
             textDecoration = TextDecoration.Underline,
             lineHeight = 25.sp,
             overflow = TextOverflow.Ellipsis,
-            color = ColorBlue,
+            color = TextColor,
             maxLines = 1,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+                .fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontSize = 12.sp
         )
     }
 }
 
-@Composable
-fun BottomNavigationBarExample(modifier: Modifier) {
-
-    var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Songs", "Artists", "Playlists", "Settigns")
-    val selectedIcons = listOf(Icons.Filled.Home, Icons.Filled.AddCircle, Icons.Filled.DateRange, Icons.Filled.Settings)
-    val unselectedIcons =
-        listOf(Icons.Filled.Home, Icons.Outlined.AddCircle, Icons.Outlined.Star, Icons.Filled.Settings)
-
-    NavigationBar (
-        modifier = modifier,
-        containerColor = ColorBlue,
-        contentColor = ivory,
-    ){
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        if (selectedItem == index) selectedIcons[index] else unselectedIcons[index],
-                        contentDescription = item
-                    )
-                },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
-            )
-        }
-    }
-}

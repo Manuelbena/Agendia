@@ -1,6 +1,8 @@
 package com.example.agendia.authentication.presentation
 
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,21 +25,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.example.agendia.authentication.presentation.components.LoginWithGoogleButton
+import com.example.agendia.navigation.NavigationHost
+import com.example.agendia.navigation.NavigationRoute
 import com.example.agendia.ui.theme.ColorBlue
 import com.example.agendia.ui.theme.TextColor
 import com.example.agendia.ui.theme.ivory
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun LoginScreen(
+    navController: NavHostController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     Box(
         modifier =
-        Modifier.fillMaxSize()
+        Modifier
+            .fillMaxSize()
             .background(color = ColorBlue)
     ) {
 
@@ -46,66 +52,66 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-               .background(color = ivory),
+                .background(color = ivory),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-                    Text(
-                        modifier = Modifier.padding(top = 100.dp, bottom = 24.dp),
-                        text = "AGENDIA",
-                        fontWeight = FontWeight.ExtraBold,
-                        style = MaterialTheme.typography.headlineLarge,
-                        textAlign = TextAlign.Center,
-
-                        color = TextColor,
-                        fontSize = 44.sp
-                    )
-                    HorizontalDivider(thickness = 2.dp, color = TextColor)
-                    Text(
-                        modifier = Modifier.padding(bottom = 24.dp, top = 24.dp),
-                        text = "2025",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                        color = TextColor,
-                        fontSize = 34.sp
-                    )
-
-
-
-                }
-
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
-                text = "\"Lo que se escribe, se recuerda." +
-                        "\nLo que se mide, se mejora.\n " +
-                        "Lo que se revisa, se evoluciona\"",
-                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 100.dp, bottom = 24.dp),
+                text = "AGENDIA",
+                fontWeight = FontWeight.ExtraBold,
+                style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center,
-                color = ivory,
-                fontSize = 18.sp
-            )
-            LoginWithGoogleButton(
-                onClick = {
 
-                },
-                text = "Iniciar sesión",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding( vertical = 32.dp)
+                color = TextColor,
+                fontSize = 44.sp
             )
+            HorizontalDivider(thickness = 2.dp, color = TextColor)
+            Text(
+                modifier = Modifier.padding(bottom = 24.dp, top = 24.dp),
+                text = "2025",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+                color = TextColor,
+                fontSize = 34.sp
+            )
+
+
         }
+
     }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            text = "\"Lo que se escribe, se recuerda." +
+                    "\nLo que se observa, se mejora.\n " +
+                    "Lo que se revisa, evoluciona\"",
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            color = ivory,
+            fontSize = 18.sp
+        )
+        LoginWithGoogleButton(
+            onClick = {
+                navController.navigate(NavigationRoute.HomeScreen.route)
+
+            },
+            text = "Iniciar sesión",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 32.dp)
+        )
+    }
+}
 

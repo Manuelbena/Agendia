@@ -20,7 +20,7 @@ fun NavigationHost(
         startDestination = startDestination.route
     ) {
         composable(NavigationRoute.LoginScreen.route) {
-            LoginScreen()
+            LoginScreen(navController = navHostController)
         }
         composable(NavigationRoute.HomeScreen.route) {
            HomeScreen()
