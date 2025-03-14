@@ -1,3 +1,5 @@
+@file:Suppress("UNREACHABLE_CODE")
+
 package com.example.agendia.home.Presentation
 
 
@@ -23,21 +25,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -49,7 +55,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,38 +62,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-
+import androidx.navigation.NavHostController
 import com.example.agendia.R
 import com.example.agendia.home.Presentation.model.BottomNavigationItem
 import com.example.agendia.home.Presentation.model.Task
-import com.example.agendia.ui.theme.ColorBlue
+import com.example.agendia.navigation.NavigationRoute
+import com.example.agendia.ui.theme.BackgroundPrimary
 import com.example.agendia.ui.theme.TextColor
 import com.example.agendia.ui.theme.esmerald
 import com.example.agendia.ui.theme.ivory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import kotlin.text.format
 
-
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()
 ) {
-// List of navigation items
+    // List of navigation items
     val items = listOf(
-        BottomNavigationItem("Inicio", Icons.Filled.Home),
-        BottomNavigationItem("Calendario", Icons.Filled.DateRange),
-        BottomNavigationItem("Credito", Icons.Filled.ShoppingCart),
-        BottomNavigationItem("Ajustes", Icons.Filled.Settings)
+        BottomNavigationItem("Inicio", Icons.Filled.Home, "home"),
+        BottomNavigationItem("Calendario", Icons.Filled.DateRange, "home"),
+        BottomNavigationItem("Habits", Icons.Filled.Face, "habits"),
+        BottomNavigationItem("Ahorros", Icons.Filled.Star, "home")
 
     )
     // Get today's date
     val today = LocalDate.now()
 
     // Format the date as "dd 'de' MMMM 'de' yyyy" (e.g., "08 de enero de 2023")
-    val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy",)
+    val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy")
     val formattedDate = today.format(formatter)
 
     // State to track the currently selected item
@@ -96,22 +100,49 @@ fun HomeScreen(
 
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        text = "AGENDIA",
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Start,
+                        color = ivory,
+                        fontSize = 16.sp
+                    )
+                },
+                actions = {
+                    IconButton(modifier = Modifier.padding(horizontal = 16.dp),
+                        onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
+                    }
+                },
+                colors = TopAppBarColors(
+                    BackgroundPrimary,
+                    ivory,
+                    ivory,
+                    ivory,
+                    ivory
+                )
+            )
+        },
         bottomBar = {
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = ColorBlue,
+                containerColor = BackgroundPrimary,
                 contentColor = ivory,
                 tonalElevation = 10.dp
             ) {
                 items.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        icon = {
-                            Icon(item.icon, contentDescription = item.title)
-                        },
+                    NavigationBarItem(icon = {
+                        Icon(item.icon, contentDescription = item.title)
+                    },
                         label = { Text(item.title) },
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index
+                            navController.navigate(NavigationRoute.HabitsScreen.route)
                         },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = esmerald
@@ -127,28 +158,25 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = ColorBlue)
+                .background(color = BackgroundPrimary)
                 .padding(innerPadding) // Add padding to the Box
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 // Row de saludo y fecha
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 50.dp),
+                        .padding(top = 30.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp),
                             text = "Hola, Manuel",
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start,
@@ -158,23 +186,20 @@ fun HomeScreen(
 
                         Text(
                             text = formattedDate,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp),
                             color = ivory,
                             fontSize = 12.sp,
                             textAlign = TextAlign.Start,
                         )
                     }
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp),
+                        modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
                             painter = painterResource(id = R.mipmap.ic_lluvia),
                             contentDescription = "Imagen de perfil",
-                            modifier = Modifier
-                                .size(60.dp)
+                            modifier = Modifier.size(60.dp)
                         )
                         Text(
                             text = "17ªC",
@@ -221,15 +246,14 @@ fun FilledCard(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()) // Añade el scroll vertical
-            .background(ivory),
+            .background(Color.White),
     ) {
         // Lista de información de hoy
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Eventos programados hoy",
+                text = "Tareas programados para hoy",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
@@ -244,14 +268,13 @@ fun FilledCard(
             ItemToday(tasks) //eventos de hoy
 
             Text(
-                text = "Ver todos los eventos",
+                text = "Ver todas los tareas para hoy",
                 textDecoration = TextDecoration.Underline,
                 lineHeight = 25.sp,
                 overflow = TextOverflow.Ellipsis,
                 color = TextColor,
                 maxLines = 1,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp
             )
@@ -266,10 +289,9 @@ fun FilledCard(
 
 @Composable
 fun FloatingActionButtonExample(modifier: Modifier) {
-    FloatingActionButton(
-        modifier = modifier,
+    FloatingActionButton(modifier = modifier,
         contentColor = ivory,
-        containerColor = TextColor,
+        containerColor = BackgroundPrimary,
         onClick = { print("Hello") }) {
         Icon(Icons.Filled.Add, "Floating action button.")
     }
@@ -293,13 +315,12 @@ fun ActivityRow(activity: Task) {
     Row(
         modifier = Modifier.padding(horizontal = 10.dp),
         verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Center
 
-        ) {
+    ) {
 
         Text(
-            text = activity.date,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            text = activity.date, style = MaterialTheme.typography.bodyMedium, color = Color.Gray
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -360,7 +381,7 @@ fun ItemEvent(task: List<Task>) {
     Column(
     ) {
         Text(
-            text = "Proximas Tareas",
+            text = "Próximas Tareas",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
@@ -373,8 +394,7 @@ fun ItemEvent(task: List<Task>) {
         )
 
         LazyRow(
-            Modifier
-                .fillMaxSize(),
+            Modifier.fillMaxSize(),
         ) {
             items(task) { task ->
                 ElevatedCard(
@@ -390,8 +410,7 @@ fun ItemEvent(task: List<Task>) {
                     ),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .padding(12.dp),
+                        modifier = Modifier.padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -407,21 +426,19 @@ fun ItemEvent(task: List<Task>) {
                         )
                     }
                     HorizontalDivider(
-                        color = ColorBlue,
-                        thickness = 10.dp
+                        color = BackgroundPrimary, thickness = 10.dp
                     )
                 }
             }
         }
         Text(
-            text = "Ver Todas las tareas",
+            text = "Ver próximas tareas",
             textDecoration = TextDecoration.Underline,
             lineHeight = 25.sp,
             overflow = TextOverflow.Ellipsis,
             color = TextColor,
             maxLines = 1,
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontSize = 12.sp
         )

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.agendia.authentication.presentation.LoginScreen
+import com.example.agendia.habits.HabitsScreen
 import com.example.agendia.home.Presentation.HomeScreen
 
 @Composable
@@ -23,7 +24,11 @@ fun NavigationHost(
             LoginScreen(navController = navHostController)
         }
         composable(NavigationRoute.HomeScreen.route) {
-           HomeScreen()
+           HomeScreen(navController = navHostController)
+
+        }
+        composable(NavigationRoute.HabitsScreen.route) {
+            HabitsScreen()
 
         }
     }
