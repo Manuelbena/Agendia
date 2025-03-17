@@ -152,7 +152,12 @@ fun HomeScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButtonExample(modifier = Modifier)
+            FloatingActionButton(modifier = Modifier,
+                contentColor = ivory,
+                containerColor = BackgroundPrimary,
+                onClick = { print("Hello") }) {
+                Icon(Icons.Filled.Add, "Floating action button.")
+            }
         },
     ) { innerPadding ->
         Box(
@@ -284,17 +289,6 @@ fun FilledCard(
     }
 
 
-}
-
-
-@Composable
-fun FloatingActionButtonExample(modifier: Modifier) {
-    FloatingActionButton(modifier = modifier,
-        contentColor = ivory,
-        containerColor = BackgroundPrimary,
-        onClick = { print("Hello") }) {
-        Icon(Icons.Filled.Add, "Floating action button.")
-    }
 }
 
 @Composable

@@ -1,8 +1,7 @@
-package com.example.agendia.habits
+package com.example.agendia.habits.presentation
 
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,27 +38,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.agendia.R
-import com.example.agendia.habits.components.HomeDateSelector
-import com.example.agendia.habits.components.HomeQuote
-import com.example.agendia.home.Presentation.ItemEvent
-import com.example.agendia.home.Presentation.ItemToday
+import com.example.agendia.habits.presentation.components.HomeDateSelector
+import com.example.agendia.habits.presentation.components.HomeQuote
+import com.example.agendia.home.Presentation.HomeEvent
 import com.example.agendia.home.Presentation.model.BottomNavigationItem
-import com.example.agendia.home.Presentation.model.Task
 import com.example.agendia.ui.theme.BackgroundPrimary
 import com.example.agendia.ui.theme.TextColor
 import com.example.agendia.ui.theme.esmerald
 import com.example.agendia.ui.theme.ivory
-import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -69,11 +62,13 @@ fun HabitsScreen(
     viewModel: HabitsViewModel = hiltViewModel()
 ) {
 
+    // Get the state from the ViewModel
+    val state = viewModel.state
 
     // List of navigation items
     val items = listOf(
         BottomNavigationItem("Inicio", Icons.Filled.Home, "home"),
-        BottomNavigationItem("Calendario", Icons.Filled.DateRange,"home"),
+        BottomNavigationItem("Calendario", Icons.Filled.DateRange, "home"),
         BottomNavigationItem("Habits", Icons.Filled.Face, "habits"),
         BottomNavigationItem("Ahorros", Icons.Filled.Star, "home")
 
@@ -83,6 +78,9 @@ fun HabitsScreen(
     var selectedItemIndex by remember { mutableIntStateOf(2) }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundPrimary),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -110,43 +108,44 @@ fun HabitsScreen(
             )
         },
         bottomBar = {
-        NavigationBar(
-            modifier = Modifier.fillMaxWidth(),
-            containerColor = BackgroundPrimary,
-            contentColor = ivory,
-            tonalElevation = 10.dp
-        ) {
-            items.forEachIndexed { index, item ->
-                NavigationBarItem(
-                    icon = {
-                        Icon(item.icon, contentDescription = item.title)
-                    },
-                    label = { Text(item.title) },
-                    selected = selectedItemIndex == index,
-                    onClick = {
-                        selectedItemIndex = index
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = esmerald
+            NavigationBar(
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = BackgroundPrimary,
+                contentColor = ivory,
+                tonalElevation = 10.dp
+            ) {
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        icon = {
+                            Icon(item.icon, contentDescription = item.title)
+                        },
+                        label = { Text(item.title) },
+                        selected = selectedItemIndex == index,
+                        onClick = {
+                            selectedItemIndex = index
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = esmerald
+                        )
                     )
-                )
+                }
             }
-        }
-    }) {innerPadding ->
-        Column (
+        }) { innerPadding ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BackgroundPrimary)
                 .padding(innerPadding) // Add padding to the Box
+
         ) {
 
-        //Contenido de la pantalla de Habitos
             HomeQuote(
-                quote = "Primero creamos nuestros hábitos, luego nuestros hábitos nos crean a nosotros.",
+                quote = "Primero hacemos nuestros hábitos, y luego nuestros hábitos nos hacen a nosotros.",
                 imageId = R.drawable.onboarding1,
-                modifier = Modifier
-                    .padding(20.dp)
+                modifier = Modifier.padding(end = 20.dp, start = 20.dp, top = 20.dp)
             )
+
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,10 +159,13 @@ fun HabitsScreen(
                     color = ivory
                 )
                 Spacer(modifier = Modifier.width(16.dp))
+
                 HomeDateSelector(
-                    selectedDate = ZonedDateTime.now(),
-                    mainDate = ZonedDateTime.now(),
-                    onDateClick = {}
+                    selectedDate = state.selectedDate,
+                    mainDate = state.currentDate,
+                    onDateClick = {
+                        viewModel.onEvent(HomeEvent.ChangeDate(it))
+                    }
                 )
             }
 
@@ -177,20 +179,11 @@ fun HabitsScreen(
     }
 }
 
+
 @Composable
 fun FilledCardHabits(
     modifier: Modifier
 ) {
-    val tasks = listOf(
-        Task("09:00", "Reunión con el equipo de diseño", "Oficina principal", true),
-        Task("10:00", "Presentación del proyecto", "Sala de conferencias", false),
-        Task("11:00", "Revisión de código de ayer", "Oficina", false),
-        Task("12:00", "Reunión con el equipo de diseño", "Oficina principal", false),
-        Task("12:45", "Presentación del proyecto", "Sala de conferencias", false),
-        Task("12:55", "Revisión de código", "Oficina", false),
-    )
-
-
     Column(
         modifier = modifier
             .fillMaxSize()

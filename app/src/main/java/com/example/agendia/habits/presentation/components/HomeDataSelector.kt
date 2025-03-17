@@ -1,4 +1,4 @@
-package com.example.agendia.habits.components
+package com.example.agendia.habits.presentation.components
 
 
 import androidx.compose.foundation.layout.Arrangement
