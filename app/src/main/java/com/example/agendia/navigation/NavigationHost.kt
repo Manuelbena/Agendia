@@ -1,7 +1,6 @@
 package com.example.agendia.navigation
 
 import androidx.compose.runtime.Composable
-
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +26,7 @@ fun NavigationHost(
 
         }
         composable(NavigationRoute.HabitsScreen.route) {
-            HabitsScreen()
+            HabitsScreen(navController = navHostController)
 
         }
     }

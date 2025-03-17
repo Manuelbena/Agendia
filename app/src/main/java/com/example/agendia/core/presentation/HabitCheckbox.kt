@@ -15,8 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.agendia.ui.theme.BackgroundPrimary
+import com.example.agendia.ui.theme.TextColor
 
 @Composable
 fun HabitCheckbox(
@@ -25,7 +28,7 @@ fun HabitCheckbox(
     onCheckedChange: () -> Unit
 ) {
     val backgroundColor =
-        if (isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+        if (isChecked) BackgroundPrimary else TextColor.copy(alpha = 0.5f)
 
     Box(
         modifier = modifier
@@ -41,7 +44,7 @@ fun HabitCheckbox(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "checked",
-                tint = MaterialTheme.colorScheme.tertiary
+                tint = Color.White
             )
         }
     }

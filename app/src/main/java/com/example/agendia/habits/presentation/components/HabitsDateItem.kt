@@ -23,7 +23,7 @@ import com.example.agendia.ui.theme.TextColor
 import java.time.ZonedDateTime
 
 @Composable
-fun HomeDateItem(
+fun HabitsDateItem(
     date: ZonedDateTime,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
@@ -79,11 +79,11 @@ fun HomeDateItem(
 @Preview
 @Composable
 fun HomeDateItemUnselectedPreview() {
-    HomeDateItem(date = ZonedDateTime.now(), isSelected = false) {}
+    HabitsDateItem(date = ZonedDateTime.now(), isSelected = false) {}
 }
 
 @Preview
 @Composable
 fun HomeDateItemSelectedPreview() {
-    HomeDateItem(date = ZonedDateTime.now(), isSelected = true) {}
+    HabitsDateItem(date = ZonedDateTime.now(), isSelected = true) {}
 }

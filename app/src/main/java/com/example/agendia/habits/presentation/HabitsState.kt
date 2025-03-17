@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 data class HabitsState(
     val currentDate: ZonedDateTime = ZonedDateTime.now(),
     val selectedDate: ZonedDateTime = ZonedDateTime.now(),
-    val habits: List<Habit> = emptyList(),
+    val habits: List<Habit> = mockHabits
     //val habits: List<Habit> = mockHabits // emptyList()
 )
 
@@ -20,7 +20,7 @@ private val mockHabits = (1..30).map {
     }
     Habit(
         id = it.toString(),
-        name = "Habito $it",
+        name = "Habito  $it",
         frequency = listOf(),
         completedDates = dates,
         reminder = LocalTime.now(),

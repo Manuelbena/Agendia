@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import java.time.ZonedDateTime
 
 @Composable
-fun HomeDateSelector(
+fun HabitsDateSelector(
     selectedDate: ZonedDateTime,
     mainDate: ZonedDateTime,
     onDateClick: (ZonedDateTime) -> Unit,
@@ -25,7 +25,7 @@ fun HomeDateSelector(
     ) {
         for (i in datesToShow downTo 0) {
             val date = mainDate.minusDays(i.toLong())
-            HomeDateItem(
+            HabitsDateItem(
                 date = date,
                 isSelected = selectedDate.toLocalDate() == date.toLocalDate()
             ) {

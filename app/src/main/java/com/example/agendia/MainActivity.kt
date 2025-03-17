@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = BackgroundPrimary
                 ) {
-                    val startDestination = NavigationRoute.HomeScreen
+                    val startDestination = NavigationRoute.LoginScreen
 
                     NavigationHost(startDestination)
                 }

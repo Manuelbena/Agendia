@@ -106,6 +106,7 @@ fun HomeScreen(
                     Text(
                         modifier = Modifier.padding(horizontal = 12.dp),
                         text = "AGENDIA",
+                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                         color = ivory,
@@ -172,17 +173,17 @@ fun HomeScreen(
                 // Row de saludo y fecha
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 30.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(start = 20.dp),
+                        horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
                             modifier = Modifier.padding(horizontal = 12.dp),
                             text = "Hola, Manuel",
+                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Start,
                             color = ivory,
@@ -221,75 +222,61 @@ fun HomeScreen(
                 }
 
                 // Card rellena
-                FilledCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f) // Ocupa todo el espacio restante
-                        .clip(RoundedCornerShape(topStart = 25.dp)) // Redondea solo la esquina superior izquierda
+                val tasks = listOf(
+                    Task("09:00", "Reunión con el equipo de diseño", "Oficina principal", true),
+                    Task("10:00", "Presentación del proyecto", "Sala de conferencias", false),
+                    Task("11:00", "Revisión de código de ayer", "Oficina", false),
+                    Task("12:00", "Reunión con el equipo de diseño", "Oficina principal", false),
+                    Task("12:45", "Presentación del proyecto", "Sala de conferencias", false),
+                    Task("12:55", "Revisión de código", "Oficina", false),
                 )
+
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()) // Añade el scroll vertical
+                        .background(Color.White),
+                ) {
+                    // Lista de información de hoy
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Tareas programados para hoy",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            fontSize = 14.sp,
+                            color = TextColor
+                        )
+
+                        ItemToday(tasks) //eventos de hoy
+
+                        Text(
+                            text = "Ver todas los tareas para hoy",
+                            textDecoration = TextDecoration.Underline,
+                            lineHeight = 25.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            color = TextColor,
+                            maxLines = 1,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontSize = 12.sp
+                        )
+
+                    }
+                    ItemEvent(task = tasks) // Fin de todos los eventos de hoy
+                }
             }
         }
     }
 }
 
-
-@Composable
-fun FilledCard(
-    modifier: Modifier
-) {
-    val tasks = listOf(
-        Task("09:00", "Reunión con el equipo de diseño", "Oficina principal", true),
-        Task("10:00", "Presentación del proyecto", "Sala de conferencias", false),
-        Task("11:00", "Revisión de código de ayer", "Oficina", false),
-        Task("12:00", "Reunión con el equipo de diseño", "Oficina principal", false),
-        Task("12:45", "Presentación del proyecto", "Sala de conferencias", false),
-        Task("12:55", "Revisión de código", "Oficina", false),
-    )
-
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // Añade el scroll vertical
-            .background(Color.White),
-    ) {
-        // Lista de información de hoy
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Tareas programados para hoy",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                textAlign = TextAlign.Start,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1,
-                fontSize = 14.sp,
-                color = TextColor
-            )
-
-            ItemToday(tasks) //eventos de hoy
-
-            Text(
-                text = "Ver todas los tareas para hoy",
-                textDecoration = TextDecoration.Underline,
-                lineHeight = 25.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = TextColor,
-                maxLines = 1,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp
-            )
-
-        }
-        ItemEvent(task = tasks) // Fin de todos los eventos de hoy
-    }
-
-
-}
 
 @Composable
 fun ItemToday(task: List<Task>) {
@@ -378,7 +365,7 @@ fun ItemEvent(task: List<Task>) {
             text = "Próximas Tareas",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(12.dp),
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodyLarge,

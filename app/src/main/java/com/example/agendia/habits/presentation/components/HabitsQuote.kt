@@ -27,13 +27,13 @@ import com.example.agendia.ui.theme.TextColor
 
 @Preview
 @Composable
-fun HomeQuote(
+fun HabitsQuote(
     quote : String,
     @DrawableRes imageId : Int,
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).height(180.dp)
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).height(150.dp)
             .background(color = Color.White)
     ) {
         Image(
@@ -43,7 +43,7 @@ fun HomeQuote(
             modifier = Modifier.align(Alignment.TopEnd).graphicsLayer(
                 scaleX = 2.5f,
                 scaleY = 2.5f
-            ).offset(x = (-1).dp, y = 37.dp)
+            ).offset(x = (-4).dp, y = 30.dp)
         )
         Column(
             modifier = Modifier
@@ -52,7 +52,7 @@ fun HomeQuote(
                 .padding(end = 100.dp)
         ) {
             Text(
-                text = quote.uppercase(),
+                text = quote,
                 color = TextColor,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
