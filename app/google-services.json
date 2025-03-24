@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "740612609285",
+    "project_id": "agendia-e67fb",
+    "storage_bucket": "agendia-e67fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740612609285:android:bb9254debbda5860d6536c",
+        "android_client_info": {
+          "package_name": "com.example.agendia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740612609285-3phoe67g1j9gt1q36n7us2f4cq7u4kls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agendia",
+            "certificate_hash": "41002da7efb43d59893ec5a3ea015ff3299c2de6"
+          }
+        },
+        {
+          "client_id": "740612609285-62jtqef2cp32ies2vjb400957a4n5i72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4JQN_fW7uRQeLuEIKE4vzYO0K8B_jHl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740612609285-62jtqef2cp32ies2vjb400957a4n5i72.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,9 +13,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,9 +32,18 @@ import com.example.agendia.ui.theme.ivory
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
+    onLoggedIn: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state
+    val context = LocalContext.current
+
+    LaunchedEffect(state.loginStatus) {
+        if (state.loginStatus == LoginStatus.LOGGED_IN) {
+            onLoggedIn()
+        }
+    }
+
     Box(
         modifier =
         Modifier
@@ -97,8 +108,7 @@ fun LoginScreen(
         )
         LoginWithGoogleButton(
             onClick = {
-                navController.navigate(NavigationRoute.HomeScreen.route)
-
+               viewModel.onEvent(LoginEvent.LogIn(context))
             },
             text = "Iniciar sesión",
             modifier = Modifier

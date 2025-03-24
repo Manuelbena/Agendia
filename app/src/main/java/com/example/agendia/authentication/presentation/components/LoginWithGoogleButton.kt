@@ -23,7 +23,6 @@ import com.example.agendia.ui.theme.TextColor
 import com.example.agendia.ui.theme.esmerald
 
 
-
 @Composable
 fun LoginWithGoogleButton(
     onClick: () -> Unit,
