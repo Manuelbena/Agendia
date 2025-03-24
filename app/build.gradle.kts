@@ -1,3 +1,7 @@
+import com.android.manifmerger.Actions.load
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,6 +14,18 @@ android {
     namespace = "com.example.agendia"
     compileSdk = 35
 
+    val localProportiesFile = rootProject.file("local.properties")
+    val localProperties = Properties().apply {
+        load(FileInputStream(localProportiesFile))
+    }
+
+
+    val googleWebClientId = localProperties.getProperty("GOOGLE_WEBCLIENT_ID")
+        ?: throw IllegalArgumentException("GOOGLE_WEBCLIENT_ID not found in local.properties")
+
+
+
+
     defaultConfig {
         applicationId = "com.example.agendia"
         minSdk = 26
@@ -18,6 +34,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GOOGLE_WEBCLIENT_ID", "\"$googleWebClientId\"")
     }
 
     buildTypes {
@@ -38,6 +56,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
