@@ -26,6 +26,12 @@ android {
     val googleWebClientId = localProperties.getProperty("GOOGLE_WEBCLIENT_ID")
         ?: throw IllegalArgumentException("GOOGLE_WEBCLIENT_ID not found in local.properties")
 
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+        }
+    }
+
 
     signingConfigs {
         create("release") {
@@ -152,4 +158,9 @@ dependencies {
     kspTest(libs.hilt.compiler)
     testImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.hilt.android.testing)
+
+    //Google Calendar
+    implementation(libs.google.api.client)
+    implementation(libs.google.calendar.api)
+    implementation(libs.google.auth.library)
 }

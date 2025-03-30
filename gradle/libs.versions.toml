@@ -33,8 +33,16 @@ roomKtx = "2.6.1"
 mockk = "1.13.12"
 coroutinesTest = "1.9.0-RC.2"
 coreKtxVersion = "1.6.1"
+google-api-client = "1.31.5"
+google-calendar-api = "v3-rev411-1.25.0"
+google-auth-library = "1.7.0"
 
 [libraries]
+
+
+google-api-client = { module = "com.google.api-client:google-api-client-android", version.ref = "google-api-client" }
+google-calendar-api = { module = "com.google.apis:google-api-services-calendar", version.ref = "google-calendar-api" }
+google-auth-library = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "google-auth-library" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
