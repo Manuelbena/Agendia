@@ -80,13 +80,7 @@ fun HomeScreen(
     navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()
 ) {
     // List of navigation items
-    val items = listOf(
-        BottomNavigationItem("Inicio", Icons.Filled.Home, "home"),
-        BottomNavigationItem("Calendario", Icons.Filled.DateRange, "home"),
-        BottomNavigationItem("Habits", Icons.Filled.Face, "habits"),
-        BottomNavigationItem("Ahorros", Icons.Filled.Star, "home")
 
-    )
     // Get today's date
     val today = LocalDate.now()
 
@@ -126,30 +120,6 @@ fun HomeScreen(
                     ivory
                 )
             )
-        },
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier.fillMaxWidth(),
-                containerColor = BackgroundPrimary,
-                contentColor = ivory,
-                tonalElevation = 10.dp
-            ) {
-                items.forEachIndexed { index, item ->
-                    NavigationBarItem(icon = {
-                        Icon(item.icon, contentDescription = item.title)
-                    },
-                        label = { Text(item.title) },
-                        selected = selectedItemIndex == index,
-                        onClick = {
-                            selectedItemIndex = index
-                            navController.navigate(NavigationRoute.HabitsScreen.route)
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = esmerald
-                        )
-                    )
-                }
-            }
         },
         floatingActionButton = {
             FloatingActionButton(modifier = Modifier,
